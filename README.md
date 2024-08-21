@@ -15,7 +15,7 @@ The **Samu Data Reader** is a Python class designed to read, manipulate, and ana
 To use the `ReadSamuData` class, ensure you have the necessary dependencies installed:
 
 ```bash
-pip install numpy tabulate
+pip install numpy pandas tabulate
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ pip install numpy tabulate
 3. **Get Information About the Data:**
 
    ```python
-   print(data.info())
+   print(data.info()) # Implementing...
    ```
 
 4. **Calculate the Mean of a Column:**

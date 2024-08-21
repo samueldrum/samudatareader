@@ -2,6 +2,9 @@ import numpy as np
 from tabulate import tabulate
 from __format import format_element
 import statistics as stat
+from typing import Literal
+import pandas as pd
+import csv
 
 class ReadSamuData:
     """
@@ -13,10 +16,12 @@ class ReadSamuData:
     """
     def __init__(self, path):
         self.__path = path
-        self.data = self.datas()
+        self.data = self.__datas()
 
         if not self.__path.endswith(".smdt"):
             raise ValueError("Esse não é o path certo")
+        else:
+            pass
 
     @property
     def columnlen(self):
@@ -31,7 +36,7 @@ class ReadSamuData:
         return columns
 
     #The info will base on the second row
-    def info(self):
+    def coltypes(self):
         the_file = self.__readFile()
         secondrow = the_file[1].split(";")
         text = f"{self.columns}\n{[i for i in secondrow]}"
@@ -43,7 +48,7 @@ class ReadSamuData:
     def sizerows(self, withoutcolnames=True):
         the_file = self.__readFile()
         count = 0
-        for row in the_file:
+        for _ in the_file:
             count += 1
 
         if withoutcolnames:
@@ -71,10 +76,9 @@ class ReadSamuData:
         text = [row.split(";") for row in the_file[1:head+1]]
         return tabulate(text, tablefmt="pipe", headers=the_file[0].split(";"))
 
-    # Need more implamentation...
     def __tail(self, tail=5):
         the_file = self.__readFile()
-        text = [row.split(";") for row in the_file[-1:-(tail+1)]]
+        text = [row.split(";") for row in the_file[-(tail+1):]]
         return tabulate(text, tablefmt="pipe", headers=the_file[0].split(";"))
 
 
@@ -85,7 +89,7 @@ class ReadSamuData:
         
         return content
     
-    def datas(self):
+    def __datas(self):
         the_file = self.__readFile()
         new_list = []
         for row in the_file:
@@ -113,9 +117,27 @@ class ReadSamuData:
         return list(zip(*self.data[1:]))
     
     
-    def mean(self, column):
+    
+    def statfunc(
+        self, 
+        functioname: Literal["mean", "median", "variance", "stdv"],
+        column: str):
         #Take the index of the column
         index_column = self.columns.index(column)
         # Use indexcol property to return the column base on the index of the specific column
         column = self.indexcol[index_column]
-        return stat.mean(column)
+        
+
+        if functioname == "mean":
+            return stat.mean(column)
+        elif functioname == "median":
+            return stat.median(column)
+        elif functioname == "stdv":
+            return stat.stdev(column)
+        elif functioname == "variance":
+            return stat.variance(column)
+        
+    #Convert the smdt to pandas
+    def to_pandas(self):
+        df = pd.read_csv(self.__path, sep=";")
+        return df

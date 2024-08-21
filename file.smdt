@@ -1,6 +1,9 @@
-Nome;Idade;Salario
-Samuel;23;3400
-Maria;45;5604
-Pedro;34;6050
-Bidjory;89;4030
-SamuelT;90;20202
+Nome;Idade;Salario;Categoria
+Samuel;23;3400;Cientista
+Maria;45;5604;Analista
+Pedro;34;6050;Analista
+Bidjory;89;4030;Cientista
+SamuelT;90;20202;Analista
+
+
+
